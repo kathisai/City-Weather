@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/HomeFragment">
+
+    <fragment
+        android:id="@+id/HomeFragment"
+        android:name="com.prathap.weather.ui.fragments.HomeFragment"
+        android:label="@string/home_fragment_label"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/MapFragment" />
+        <action
+            android:id="@+id/action_HomeFragment_to_HelpFragment"
+            app:destination="@id/helpFragment" />
+        <argument
+            android:name="location"
+            android:defaultValue="@null"
+            app:argType="com.google.android.gms.maps.model.LatLng"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/MapFragment"
+        android:name="com.prathap.weather.ui.fragments.MapFragment"
+        android:label="@string/map_fragment_label"
+        tools:layout="@layout/fragment_second">
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/HomeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.prathap.weather.ui.fragments.HelpFragment"
+        android:label="@string/map_fragment_label"
+        tools:layout="@layout/fragment_help" />
+</navigation>
