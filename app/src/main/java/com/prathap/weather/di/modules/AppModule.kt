@@ -11,6 +11,9 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
+/**
+ * * for all Generic App Injection
+ */
 @Module(includes = [ViewModelModule::class])
 class AppModule {
 
@@ -29,12 +32,12 @@ class AppModule {
     @Singleton
     @Provides
     fun getRetrofitService(
-            connectivityInterceptor: ConnectivityInterceptor,
-            requestInterceptor: RequestInterceptor
+        connectivityInterceptor: ConnectivityInterceptor,
+        requestInterceptor: RequestInterceptor
     ): WeatherApiService {
         return WeatherApiService.invoke(
-                connectivityInterceptor = connectivityInterceptor,
-                requestInterceptor = requestInterceptor
+            connectivityInterceptor = connectivityInterceptor,
+            requestInterceptor = requestInterceptor
         )
     }
 
@@ -42,9 +45,9 @@ class AppModule {
     @Provides
     fun getCityWeatherDatabase(app: Application): CityWeatherDatabase {
         return Room
-                .databaseBuilder(app, CityWeatherDatabase::class.java, "bookmarks.db")
-                .fallbackToDestructiveMigration()
-                .build()
+            .databaseBuilder(app, CityWeatherDatabase::class.java, "bookmarks.db")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Singleton

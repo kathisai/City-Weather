@@ -21,7 +21,9 @@ import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.loading_view.*
 import javax.inject.Inject
 
-
+/**
+ * To show detailed Weather report
+ */
 class DetailFragment : Fragment(), Injectable {
 
 
@@ -35,10 +37,9 @@ class DetailFragment : Fragment(), Injectable {
     val args: DetailFragmentArgs by navArgs()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
 

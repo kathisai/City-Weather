@@ -10,45 +10,48 @@ import com.prathap.weather.network.exceptions.NoConnectivityException
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Repository for all network calls
+ */
 @Singleton
 class OpenWeatherRepository @Inject constructor(
-        private val weatherApiService: WeatherApiService
+    private val weatherApiService: WeatherApiService
 ) {
     suspend fun getForeCast(cityId: String): WeatherDataResults {
         try {
             val weatherData = weatherApiService.getForecastAsync(
-                    cityId = cityId
+                cityId = cityId
             ).await()
 
             return WeatherDataResults(
-                    success = true,
-                    data = weatherData
+                success = true,
+                data = weatherData
             )
         } catch (e: Exception) {
             return WeatherDataResults(
-                    success = false,
-                    error = "IllegalStateException $e"
+                success = false,
+                error = "IllegalStateException $e"
             )
         } catch (e: NoConnectivityException) {
             return WeatherDataResults(
-                    success = false,
-                    error = "NoConnectivityException $e"
+                success = false,
+                error = "NoConnectivityException $e"
             )
         } catch (e: BadRequestException) {
             return WeatherDataResults(
-                    success = false,
-                    error = "BadRequestException $e"
+                success = false,
+                error = "BadRequestException $e"
 
             )
         } catch (e: InternalServerException) {
             return WeatherDataResults(
-                    success = false,
-                    error = "InternalServerException $e"
+                success = false,
+                error = "InternalServerException $e"
             )
         } catch (e: IllegalStateException) {
             return WeatherDataResults(
-                    success = false,
-                    error = "IllegalStateException $e"
+                success = false,
+                error = "IllegalStateException $e"
             )
         }
     }
@@ -56,38 +59,38 @@ class OpenWeatherRepository @Inject constructor(
     suspend fun getGroupWeatherData(city_ids: String): CitiesWeatherResults {
         try {
             val weatherData = weatherApiService.getGroupForecastAsync(
-                    city_id = city_ids
+                city_id = city_ids
             ).await()
 
             return CitiesWeatherResults(
-                    success = true,
-                    data = weatherData
+                success = true,
+                data = weatherData
             )
         } catch (e: Exception) {
             return CitiesWeatherResults(
-                    success = false,
-                    error = "IllegalStateException $e"
+                success = false,
+                error = "IllegalStateException $e"
             )
         } catch (e: NoConnectivityException) {
             return CitiesWeatherResults(
-                    success = false,
-                    error = "NoConnectivityException $e"
+                success = false,
+                error = "NoConnectivityException $e"
             )
         } catch (e: BadRequestException) {
             return CitiesWeatherResults(
-                    success = false,
-                    error = "BadRequestException $e"
+                success = false,
+                error = "BadRequestException $e"
 
             )
         } catch (e: InternalServerException) {
             return CitiesWeatherResults(
-                    success = false,
-                    error = "InternalServerException $e"
+                success = false,
+                error = "InternalServerException $e"
             )
         } catch (e: IllegalStateException) {
             return CitiesWeatherResults(
-                    success = false,
-                    error = "IllegalStateException $e"
+                success = false,
+                error = "IllegalStateException $e"
             )
         }
     }
@@ -95,18 +98,18 @@ class OpenWeatherRepository @Inject constructor(
     suspend fun getCityWeatherDataByLatLon(lat: String, lon: String): WeatherDataResults {
         try {
             val weatherData = weatherApiService.getForecastByLatLonAsync(
-                    lat = lat,
-                    lon = lon
+                lat = lat,
+                lon = lon
             ).await()
 
             return WeatherDataResults(
-                    success = true,
-                    data = weatherData
+                success = true,
+                data = weatherData
             )
         } catch (e: Exception) {
             return WeatherDataResults(
-                    success = false,
-                    error = "IllegalStateException $e"
+                success = false,
+                error = "IllegalStateException $e"
             )
         }
 

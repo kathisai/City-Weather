@@ -23,15 +23,15 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.prathap.weather.R
 import kotlinx.android.synthetic.main.fragment_map.*
 
-
+/**
+ *  Map Fragment to support pin on google Maps
+ */
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener {
 
     private lateinit var mGoogleMap: GoogleMap
-    internal var mCurrLocationMarker: Marker? = null
     var mLastLocation: Location? = null
     lateinit var mLocationRequest: LocationRequest
     private var mFusedLocationClient: FusedLocationProviderClient? = null
@@ -43,19 +43,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraIdleListen
             if (locationList.isNotEmpty()) {
                 val location = locationList.last()
                 mLastLocation = location
-//                if (mCurrLocationMarker != null) {
-//                    mCurrLocationMarker?.remove()
-//                }
-//
-//                //Place current location marker
                 val latLng = LatLng(location.latitude, location.longitude)
-//                mSelectedLocation = latLng
-//                val markerOptions = MarkerOptions()
-//                markerOptions.position(latLng)
-//                markerOptions.draggable(true)
-//                markerOptions.title("Drag marker to add City")
-//                mCurrLocationMarker = mGoogleMap.addMarker(markerOptions)
-
                 //move map camera
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0F))
                 mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(13f))
@@ -85,7 +73,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraIdleListen
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
@@ -114,27 +101,16 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraIdleListen
     override fun onMapReady(googleMap: GoogleMap?) {
         googleMap?.let {
             mGoogleMap = it
-
             mLocationRequest = LocationRequest()
-            mLocationRequest.interval = 120000 // two minute interval
+            mLocationRequest.interval = 120000
             mLocationRequest.fastestInterval = 120000
             mLocationRequest.priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
-
             mFusedLocationClient?.requestLocationUpdates(
                 mLocationRequest,
                 mLocationCallback,
                 Looper.myLooper()
             )
             mGoogleMap.isMyLocationEnabled = true
-
-//            mGoogleMap.setOnMarkerDragListener(object : OnMarkerDragListener {
-//                override fun onMarkerDragStart(marker: Marker) {}
-//                override fun onMarkerDrag(marker: Marker) {}
-//                override fun onMarkerDragEnd(marker: Marker) {
-//                    val latLng = marker.position
-//                    mSelectedLocation = marker.position
-//                }
-//            })
             mGoogleMap.setOnCameraIdleListener(this)
         }
 
@@ -205,6 +181,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraIdleListen
     }
 
     companion object {
+        // to handle permission request
         const val LOCATION_PERMISSION_REQUEST_CODE = 102
     }
 

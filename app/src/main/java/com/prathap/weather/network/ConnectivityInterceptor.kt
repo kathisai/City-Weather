@@ -10,8 +10,11 @@ import com.prathap.weather.network.exceptions.NoConnectivityException
 import okhttp3.Interceptor
 import okhttp3.Response
 
+/**
+ * OkHttp Interceptor for Retrofit 2
+ */
 class ConnectivityInterceptor(
-        context: Context
+    context: Context
 ) : Interceptor {
 
     private val appContext = context.applicationContext

@@ -16,4 +16,5 @@
     <string name="pressure">Pressure %s Pa</string>
     <string name="humidity">Humidity  %s rh</string>
     <string name="click_on_add_to_book_mark_the_city">Click on Add to book mark the city</string>
+    <string name="genrial_error_message">Something went wrong!!</string>
 </resources>

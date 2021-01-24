@@ -15,9 +15,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * Shared ViewModel for all fragments
+ */
 class HomeViewModel @Inject constructor(
-        private val repository: OpenWeatherRepository,
-        private val cityRepository: CityRepository
+    private val repository: OpenWeatherRepository,
+    private val cityRepository: CityRepository
 ) : ViewModel() {
 
     var loading = MutableLiveData<Int>()
@@ -34,6 +37,9 @@ class HomeViewModel @Inject constructor(
     val cityResults: LiveData<WeatherDataResults>
         get() = _cityResults
 
+    /**
+     * Get bulk report based on grup of city id's form bookmarks
+     */
     fun getBookMarkedData(city_ids: String) {
         loading.value = View.VISIBLE
         GlobalScope.launch(Dispatchers.IO) {
@@ -43,16 +49,24 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
+    /**
+     * Get Weather for one City with Lat, Lon
+     */
     fun getCityWeather(latitude: Double, longitude: Double) {
         loading.value = View.VISIBLE
         GlobalScope.launch(Dispatchers.IO) {
-            val weatherDataResults = repository.getCityWeatherDataByLatLon(lat = latitude.toString(), lon = longitude.toString())
+            val weatherDataResults = repository.getCityWeatherDataByLatLon(
+                lat = latitude.toString(),
+                lon = longitude.toString()
+            )
             _cityResults.postValue(weatherDataResults)
             loading.postValue(View.GONE)
         }
     }
 
+    /**
+     * WIP: Optional to get 5 days forecast to display on DetailFragment
+     */
     fun getCityForecast(cityID: String) {
         GlobalScope.launch(Dispatchers.IO) {
             val weatherDataResults = repository.getForeCast(cityID)
@@ -61,7 +75,7 @@ class HomeViewModel @Inject constructor(
     }
 
     /**
-     * DB operation
+     * DB operations
      */
     fun addBookmarkToDB(cityID: Long, lat: String, lon: String) {
         GlobalScope.launch(Dispatchers.IO) {

@@ -5,7 +5,9 @@ import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 import com.prathap.weather.R
 
-
+/**
+ * One place to set Weather Icons to AppCompactImageView
+ */
 class IconUtil {
 
     companion object {

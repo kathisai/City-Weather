@@ -10,7 +10,7 @@ import com.prathap.weather.database.entities.CityWeather
 
 
 /**
- * Data access object for Cheese.
+ * Data access object for CityWeather.
  */
 @Dao
 interface CityWeatherDao {

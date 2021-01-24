@@ -28,7 +28,7 @@ class CityWeather {
 
 
     companion object {
-        /** The name of the cityweather table.  */
+        /** The name of the table in bookmarks.db.  */
         const val TABLE_NAME = "cityweather"
 
         /** The name of the ID column.  */

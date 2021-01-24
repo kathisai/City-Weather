@@ -12,42 +12,45 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+/**
+ * Retrofit Service
+ */
 interface WeatherApiService {
 
-    @GET("group?&appid=fae7190d7e6433ec3a45285ffcf55c86")
+    @GET("group?")
     fun getGroupForecastAsync(
-            @Query("id") city_id: String
+        @Query("id") city_id: String
     ): Deferred<CitiesWeather>
 
-    @GET("forecast?&appid=fae7190d7e6433ec3a45285ffcf55c86")
+    @GET("forecast?")
     fun getForecastAsync(
-            @Query("id") cityId: String
+        @Query("id") cityId: String
     ): Deferred<WeatherForecast>
 
-    @GET("weather?&appid=fae7190d7e6433ec3a45285ffcf55c86")
+    @GET("weather?")
     fun getForecastByLatLonAsync(
-            @Query("lat") lat: String,
-            @Query("lon") lon: String
+        @Query("lat") lat: String,
+        @Query("lon") lon: String
     ): Deferred<WeatherForecast>
 
     companion object {
         operator fun invoke(
-                connectivityInterceptor: ConnectivityInterceptor,
-                requestInterceptor: RequestInterceptor
+            connectivityInterceptor: ConnectivityInterceptor,
+            requestInterceptor: RequestInterceptor
         ): WeatherApiService {
 
             val okHttpClient = OkHttpClient.Builder()
-                    .addInterceptor(requestInterceptor)
-                    .addInterceptor(connectivityInterceptor)
-                    .build()
+                .addInterceptor(requestInterceptor)
+                .addInterceptor(connectivityInterceptor)
+                .build()
 
             return Retrofit.Builder()
-                    .client(okHttpClient)
-                    .baseUrl(Constants.BASE_URL)
-                    .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(WeatherApiService::class.java)
+                .client(okHttpClient)
+                .baseUrl(Constants.BASE_URL)
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(WeatherApiService::class.java)
         }
     }
 }

@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 
 /**
- *
+ * Initial Fragment to show list of bookmarked cities
  */
 class HomeFragment : Fragment(), Injectable {
 
@@ -45,7 +45,6 @@ class HomeFragment : Fragment(), Injectable {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -58,7 +57,6 @@ class HomeFragment : Fragment(), Injectable {
 
             val swipeHandler = object : SwipeToDeleteCallback(it) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    //remove item from DB, it will automatically update List if its delete successfully
                     viewModel.removeBookmarkFromDB(cityWeather[viewHolder.adapterPosition].id.toLong())
                     cityAdapter.removeAt(viewHolder.adapterPosition)
                 }
@@ -80,13 +78,11 @@ class HomeFragment : Fragment(), Injectable {
                     cityWeather.addAll(weatherForecast.list)
                     cityAdapter.notifyDataSetChanged()
                     emptyView.visibility = View.GONE
-                    //(activity as FragmentNavigator).loadWeatherFragment(weatherForecast)
-                    //  findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
                 } ?: run {
                     showError()
                 }
             } else {
-                showSnackBar()
+                showEmptyView()
             }
         })
 
@@ -95,7 +91,7 @@ class HomeFragment : Fragment(), Injectable {
                 val cityIds: String = bookmarks.joinToString { it -> "${it.id}" }.replace(" ", "")
                 viewModel.getBookMarkedData(cityIds)
             } else {
-                showSnackBar()
+                showEmptyView()
             }
         })
 
@@ -111,6 +107,7 @@ class HomeFragment : Fragment(), Injectable {
         }
 
         arguments?.let {
+            //TODO replace with constant
             if (it.containsKey("location")) {
                 val location: LatLng? = it.getParcelable("location")
                 location?.let {
@@ -123,17 +120,12 @@ class HomeFragment : Fragment(), Injectable {
 
     private fun showError() {
         context?.let {
-            Toast.makeText(it, "Something went wrong!!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(it, getString(R.string.genrial_error_message), Toast.LENGTH_SHORT).show()
         }
 
     }
 
-    private fun showSnackBar() {
+    private fun showEmptyView() {
         emptyView.visibility = View.VISIBLE
-//        val snack = Snackbar.make(clRoot, "No bookmarks found!!!", Snackbar.LENGTH_SHORT)
-//        snack.setAction("Add") {
-//            findNavController().navigate(R.id.action_HomeFragment_to_MapFragment)
-//        }
-//        snack.show()
     }
 }
