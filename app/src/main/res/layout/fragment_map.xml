@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.MapFragment">
 
+
     <Button
         android:id="@+id/btnConfirm"
         android:layout_width="match_parent"
@@ -18,6 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.HomeActivity" />
+
+    <ImageView
+        android:id="@+id/imageMarker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:src="@drawable/add_marker" />
 
 
 </FrameLayout>

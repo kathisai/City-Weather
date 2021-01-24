@@ -31,11 +31,13 @@
         android:id="@+id/MapFragment"
         android:name="com.prathap.weather.ui.fragments.MapFragment"
         android:label="@string/map_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_map">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/HomeFragment" />
+            app:destination="@id/HomeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

@@ -6,10 +6,11 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -19,17 +20,15 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.prathap.weather.R
-import kotlinx.android.synthetic.main.fragment_second.*
+import kotlinx.android.synthetic.main.fragment_map.*
 
 
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener {
 
     private lateinit var mGoogleMap: GoogleMap
     internal var mCurrLocationMarker: Marker? = null
@@ -42,23 +41,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         override fun onLocationResult(locationResult: LocationResult) {
             val locationList = locationResult.locations
             if (locationList.isNotEmpty()) {
-                //The last location in the list is the newest
                 val location = locationList.last()
-                Log.i("MapsActivity", "Location: " + location.latitude + " " + location.longitude)
                 mLastLocation = location
-                if (mCurrLocationMarker != null) {
-                    mCurrLocationMarker?.remove()
-                }
-
-                //Place current location marker
+//                if (mCurrLocationMarker != null) {
+//                    mCurrLocationMarker?.remove()
+//                }
+//
+//                //Place current location marker
                 val latLng = LatLng(location.latitude, location.longitude)
-                mSelectedLocation = latLng
-                val markerOptions = MarkerOptions()
-                markerOptions.position(latLng)
-                markerOptions.draggable(true)
-                markerOptions.title("Drag marker to add City")
-//                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
-                mCurrLocationMarker = mGoogleMap.addMarker(markerOptions)
+//                mSelectedLocation = latLng
+//                val markerOptions = MarkerOptions()
+//                markerOptions.position(latLng)
+//                markerOptions.draggable(true)
+//                markerOptions.title("Drag marker to add City")
+//                mCurrLocationMarker = mGoogleMap.addMarker(markerOptions)
 
                 //move map camera
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0F))
@@ -74,12 +70,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mFusedLocationClient?.removeLocationUpdates(mLocationCallback)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.helpFragment).isVisible = false
+        super.onPrepareOptionsMenu(menu)
+
+    }
+
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second, container, false)
+        return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,6 +100,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            })
 
     }
 
@@ -107,20 +121,21 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             mLocationRequest.priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
 
             mFusedLocationClient?.requestLocationUpdates(
-                    mLocationRequest,
-                    mLocationCallback,
-                    Looper.myLooper()
+                mLocationRequest,
+                mLocationCallback,
+                Looper.myLooper()
             )
             mGoogleMap.isMyLocationEnabled = true
 
-            mGoogleMap.setOnMarkerDragListener(object : OnMarkerDragListener {
-                override fun onMarkerDragStart(marker: Marker) {}
-                override fun onMarkerDrag(marker: Marker) {}
-                override fun onMarkerDragEnd(marker: Marker) {
-                    val latLng = marker.position
-                    mSelectedLocation = marker.position
-                }
-            })
+//            mGoogleMap.setOnMarkerDragListener(object : OnMarkerDragListener {
+//                override fun onMarkerDragStart(marker: Marker) {}
+//                override fun onMarkerDrag(marker: Marker) {}
+//                override fun onMarkerDragEnd(marker: Marker) {
+//                    val latLng = marker.position
+//                    mSelectedLocation = marker.position
+//                }
+//            })
+            mGoogleMap.setOnCameraIdleListener(this)
         }
 
 
@@ -184,12 +199,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun getLocationPermission(): Array<String> {
         return arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
     }
 
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 102
+    }
+
+    override fun onCameraIdle() {
+        mSelectedLocation = mGoogleMap.cameraPosition.target
     }
 }

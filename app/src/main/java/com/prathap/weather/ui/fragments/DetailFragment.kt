@@ -2,12 +2,15 @@ package com.prathap.weather.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.prathap.weather.R
 import com.prathap.weather.di.Injectable
@@ -41,18 +44,11 @@ class DetailFragment : Fragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        arguments?.let {
-//            DetailFragmentArgs.fromBundle(it).selectedLocation.let { latLan ->
-//                viewModel.getCityWeather(latLan.latitude, latLan.longitude)
-//            }
-//        }
         args.selectedLocation.let { latLan ->
             viewModel.getCityWeather(latLan.latitude, latLan.longitude)
         }
-
         viewModel.loading.observe(viewLifecycleOwner, Observer {
             loadingView.visibility = it
-
         })
 
         viewModel.cityResults.observe(viewLifecycleOwner, Observer { cityWeather ->
@@ -61,15 +57,40 @@ class DetailFragment : Fragment(), Injectable {
                 textViewCardCityName.text = it.name
                 textViewCardWeatherDescription.text = it.weather.last().description
                 textViewCardCurrentTemp.text = it.main.temp.toCelsius()
-                context?.let { it1 -> IconUtil.setWeatherIcon(it1, imageViewCardWeatherIcon, it.weather.last().id) }
-                textViewPressure.text = context?.getString(R.string.pressure)?.let { it1 -> String.format(it1, it.main.pressure.toString()) }
-                textViewHumidity.text = context?.getString(R.string.humidity)?.let { it1 -> String.format(it1, it.main.humidity.toString()) }
+                context?.let { it1 ->
+                    IconUtil.setWeatherIcon(
+                        it1,
+                        imageViewCardWeatherIcon,
+                        it.weather.last().id
+                    )
+                }
+                textViewPressure.text = context?.getString(R.string.pressure)
+                    ?.let { it1 -> String.format(it1, it.main.pressure.toString()) }
+                textViewHumidity.text = context?.getString(R.string.humidity)
+                    ?.let { it1 -> String.format(it1, it.main.humidity.toString()) }
 
             }
         })
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            })
+
 
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.helpFragment).isVisible = false
+        super.onPrepareOptionsMenu(menu)
+
+    }
 }

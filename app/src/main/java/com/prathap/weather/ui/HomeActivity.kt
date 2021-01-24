@@ -1,5 +1,7 @@
 package com.prathap.weather.ui
 
+//import androidx.navigation.findNavController
+//import androidx.navigation.ui.onNavDestinationSelected
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,9 +10,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment.findNavController
-//import androidx.navigation.findNavController
-//import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.prathap.weather.R
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -35,6 +38,18 @@ class HomeActivity : AppCompatActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowHomeEnabled(true)
+        }
+
+        NavigationUI.setupActionBarWithNavController(this, nav_host_fragment.findNavController())
+//        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                findNavController(nav_host_fragment).popBackStack()
+//            }
+//        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,5 +80,13 @@ class HomeActivity : AppCompatActivity(), HasSupportFragmentInjector {
     }
 
     override fun supportFragmentInjector() = dispatchingAndroidInjector
+
+    override fun onSupportNavigateUp(): Boolean {
+        return Navigation.findNavController(
+            this,
+            R.id.nav_host_fragment
+        ).navigateUp() || super.onSupportNavigateUp()
+    }
+
 
 }

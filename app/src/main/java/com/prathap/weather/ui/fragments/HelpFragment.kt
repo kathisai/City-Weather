@@ -4,44 +4,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebSettings
 import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.prathap.weather.R
-import com.prathap.weather.di.Injectable
-import com.prathap.weather.ui.HomeViewModel
 import kotlinx.android.synthetic.main.fragment_help.*
-import javax.inject.Inject
 
-
-class HelpFragment : Fragment(), Injectable {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    val viewModel: HomeViewModel by viewModels {
-        viewModelFactory
-    }
+/**
+ * simple fragment to show webView with HTML code in it.
+ */
+class HelpFragment : Fragment() {
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_help, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        wvHelp.loadUrl("https://google.com")
-        // Enable Javascript
-        val webSettings: WebSettings = wvHelp.settings
-        webSettings.javaScriptEnabled = true
-
+        val html: String = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<body>\n" +
+                "<h1>Help</h1>\n" +
+                "<p > ➡ Add you favirote city to Home by click on + </p>\n" +
+                "<p > ➡ Drag marker to desired location and click on confirm location button</p>\n" +
+                "<p > ➡ Click on city to see more weather insights</p>\n" +
+                "<p > ➡ Swipe Left to delete Item</p>\n" +
+                "</body>\n" +
+                "</html>"
+        wvHelp.loadData(html, "text/html", null)
         wvHelp.webViewClient = WebViewClient()
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            })
     }
 
 
