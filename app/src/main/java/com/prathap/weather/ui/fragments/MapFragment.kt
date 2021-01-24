@@ -3,7 +3,6 @@ package com.prathap.weather.ui.fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -28,8 +27,6 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.prathap.weather.R
 import kotlinx.android.synthetic.main.fragment_second.*
-import java.io.IOException
-import java.util.*
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
@@ -55,6 +52,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 //Place current location marker
                 val latLng = LatLng(location.latitude, location.longitude)
+                mSelectedLocation = latLng
                 val markerOptions = MarkerOptions()
                 markerOptions.position(latLng)
                 markerOptions.draggable(true)
@@ -90,8 +88,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mFusedLocationClient = context?.let { LocationServices.getFusedLocationProviderClient(it) }
         btnConfirm.setOnClickListener {
             mSelectedLocation?.let {
-//                val action = MapFragmentDirections.actionSecondFragmentToFirstFragment(it)
-//                findNavController().navigate(action)
                 val bundle = bundleOf("location" to it)
                 findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment, bundle)
             }
@@ -123,14 +119,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 override fun onMarkerDragEnd(marker: Marker) {
                     val latLng = marker.position
                     mSelectedLocation = marker.position
-                    val geocoder = Geocoder(context, Locale.getDefault())
-                    try {
-                        val address =
-                                geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)[0]
-                        Log.d("TAG", "address $address")
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
                 }
             })
         }

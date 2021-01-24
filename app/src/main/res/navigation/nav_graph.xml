@@ -12,11 +12,15 @@
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            android:id="@+id/action_HomeFragment_to_MapFragment"
             app:destination="@id/MapFragment" />
+        <action
+            android:id="@+id/action_HomeFragment_to_DetailFragment"
+            app:destination="@id/detailFragment" />
         <action
             android:id="@+id/action_HomeFragment_to_HelpFragment"
             app:destination="@id/helpFragment" />
+
         <argument
             android:name="location"
             android:defaultValue="@null"
@@ -37,6 +41,17 @@
     <fragment
         android:id="@+id/helpFragment"
         android:name="com.prathap.weather.ui.fragments.HelpFragment"
-        android:label="@string/map_fragment_label"
+        android:label="@string/help_fragment_label"
         tools:layout="@layout/fragment_help" />
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.prathap.weather.ui.fragments.DetailFragment"
+        android:label="@string/detail_fragment_label"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="selectedLocation"
+            app:argType="com.google.android.gms.maps.model.LatLng" />
+
+    </fragment>
 </navigation>

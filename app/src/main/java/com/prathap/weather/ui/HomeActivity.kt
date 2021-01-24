@@ -9,7 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+//import androidx.navigation.findNavController
+//import androidx.navigation.ui.onNavDestinationSelected
 import com.prathap.weather.R
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -34,14 +35,6 @@ class HomeActivity : AppCompatActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            loadMapFragment()
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", View.OnClickListener {
-//                        loadMapFragment()
-//                    }).show()
-
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -59,8 +52,11 @@ class HomeActivity : AppCompatActivity(), HasSupportFragmentInjector {
                 Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show()
                 return true
             }
-            R.id.action_help -> {
-//                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show()
+            R.id.helpFragment -> {
+                //TODO issue with Action
+//                val navController = findNavController(R.id.nav_host_fragment)
+//                return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+//                return item.onNavDestinationSelected(findNavController(nav_host_fragment)) || super.onOptionsItemSelected(item)
                 findNavController(nav_host_fragment).navigate(R.id.action_HomeFragment_to_HelpFragment)
                 return true
             }
@@ -70,7 +66,4 @@ class HomeActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     override fun supportFragmentInjector() = dispatchingAndroidInjector
 
-    private fun loadMapFragment() {
-        findNavController(nav_host_fragment).navigate(R.id.action_FirstFragment_to_SecondFragment)
-    }
 }

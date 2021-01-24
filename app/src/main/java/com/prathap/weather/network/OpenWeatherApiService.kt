@@ -19,9 +19,9 @@ interface WeatherApiService {
             @Query("id") city_id: String
     ): Deferred<CitiesWeather>
 
-    @GET("weather?&appid=fae7190d7e6433ec3a45285ffcf55c86")
+    @GET("forecast?&appid=fae7190d7e6433ec3a45285ffcf55c86")
     fun getForecastAsync(
-            @Query("q") city: String
+            @Query("id") cityId: String
     ): Deferred<WeatherForecast>
 
     @GET("weather?&appid=fae7190d7e6433ec3a45285ffcf55c86")

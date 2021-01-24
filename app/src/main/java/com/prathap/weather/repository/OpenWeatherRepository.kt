@@ -14,10 +14,10 @@ import javax.inject.Singleton
 class OpenWeatherRepository @Inject constructor(
         private val weatherApiService: WeatherApiService
 ) {
-    suspend fun getWeatherData(): WeatherDataResults {
+    suspend fun getForeCast(cityId: String): WeatherDataResults {
         try {
             val weatherData = weatherApiService.getForecastAsync(
-                    city = "Hyderabad"
+                    cityId = cityId
             ).await()
 
             return WeatherDataResults(

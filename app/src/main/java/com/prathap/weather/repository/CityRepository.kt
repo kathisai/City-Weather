@@ -20,6 +20,12 @@ class CityRepository @Inject constructor(private val db: CityWeatherDatabase,
         cityDao.insert(word)
     }
 
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun delete(id: Long) {
+        cityDao.deleteById(id)
+    }
+
 
     fun getBookmarks(): LiveData<List<CityWeather>> {
         return cityDao.getBookMarkedCities()
