@@ -7,6 +7,7 @@ import com.prathap.weather.network.WeatherApiService
 import com.prathap.weather.network.exceptions.BadRequestException
 import com.prathap.weather.network.exceptions.InternalServerException
 import com.prathap.weather.network.exceptions.NoConnectivityException
+import com.prathap.weather.utils.OpenForTesting
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,6 +15,7 @@ import javax.inject.Singleton
  * Repository for all network calls
  */
 @Singleton
+@OpenForTesting
 class OpenWeatherRepository @Inject constructor(
     private val weatherApiService: WeatherApiService
 ) {

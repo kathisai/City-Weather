@@ -10,6 +10,7 @@ import com.prathap.weather.models.CitiesWeatherResults
 import com.prathap.weather.models.WeatherDataResults
 import com.prathap.weather.repository.CityRepository
 import com.prathap.weather.repository.OpenWeatherRepository
+import com.prathap.weather.utils.OpenForTesting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ import javax.inject.Inject
 /**
  * Shared ViewModel for all fragments
  */
+@OpenForTesting
 class HomeViewModel @Inject constructor(
     private val repository: OpenWeatherRepository,
     private val cityRepository: CityRepository
