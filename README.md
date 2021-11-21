@@ -30,4 +30,6 @@
 
 
 
-This project developed as part of Mobiquity Assignment not for production ready 
+This project developed as part of Mobiquity Assignment not for production ready.
+
+Note : Change API key if exsiting key not working. 
